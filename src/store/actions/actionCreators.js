@@ -5,7 +5,6 @@ export const getRealData = () => {
   return async dispatch => {
     dispatch(request());
     await axios
-
       .get('https://api.partner.winty.app/api/v1/ecomm-fe/get-products', {
         headers: {
           auth: 'ERRZcMfEPfXG8bGF',
@@ -16,10 +15,9 @@ export const getRealData = () => {
         },
       })
       .then(res => {
-        console.log('RES>>>>>', res);
         setTimeout(() => {
           dispatch(response(res.data));
-        }, 1000);
+        }, 100);
       })
       .catch(e => {
         dispatch(failer(e));
