@@ -42,7 +42,7 @@ export default function Details({route}) {
   const renderpagination = () => {
     return (
       <Pagination
-        dotsLength={details.product_variant.length}
+        dotsLength={details?.product_variant?.length}
         activeDotIndex={activeIndex}
         dotStyle={styles.dotCon}
         inactiveDotStyle={{
@@ -54,7 +54,7 @@ export default function Details({route}) {
       />
     );
   };
-  const renderVariant = () => {
+  const renderVariant = ({item, index}) => {
     return (
       <TouchableOpacity
         onPress={() => {
@@ -79,7 +79,7 @@ export default function Details({route}) {
       <Carousel
         activeAnimationType="spring"
         pagingEnabled={true}
-        data={details.product_variant}
+        data={details?.product_variant}
         sliderWidth={Dimensions.get('screen').width}
         itemWidth={Dimensions.get('screen').width}
         renderItem={_renderItem}
@@ -93,12 +93,12 @@ export default function Details({route}) {
         contentContainerStyle={styles.detailsProductContent}
         numColumns={2}
         data={
-          details.product_variant.length !== 0
+          details?.product_variant?.length !== 0
             ? details.product_variant
             : details.image
         }
         renderItem={
-          details.product_variant.length !== 0
+          details?.product_variant?.length !== 0
             ? renderVariant
             : renderOnlyGallery
         }
