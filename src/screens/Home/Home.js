@@ -10,12 +10,11 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {getData, getRealData} from '../../store/actions/actionCreators';
+import {getRealData} from '../../store/actions/actionCreators';
 import {aryCategory} from './mock';
 export default function Home() {
   const [data, setData] = useState();
   const [finalArray, setFinalArray] = useState([]);
-
   const dispatch = useDispatch();
   const loader = useSelector(state => state?.loading);
   const usersData = useSelector(state => state?.usersData?.data);
@@ -66,6 +65,7 @@ export default function Home() {
       </TouchableOpacity>
     );
   };
+
   return (
     <View style={styles.mainContainer}>
       {loader ? (

@@ -1,9 +1,17 @@
-import {ERROR, REQUEST, RESPONSE} from '../constants/types';
+import {
+  ERROR,
+  ERROR_SINGLE,
+  REQUEST,
+  REQUEST_SINGLE,
+  RESPONSE,
+  RESPONSE_SINGLE,
+} from '../constants/types';
 
 const intialState = {
   usersData: [],
   error: '',
   loading: false,
+  // productDetails: [],
 };
 
 export const fetchData = (state = intialState, action) => {
@@ -27,3 +35,25 @@ export const fetchData = (state = intialState, action) => {
       };
   }
 };
+
+// export const fetchSingleData = (state = intialState, action) => {
+//   switch (action.type) {
+//     case REQUEST_SINGLE:
+//       return {
+//         ...state,
+//         loading: true,
+//       };
+//     case RESPONSE_SINGLE:
+//       return {
+//         ...state,
+//         loading: false,
+//         productDetails: action.payload,
+//       };
+//     case ERROR_SINGLE:
+//       return {
+//         ...state,
+//         loading: false,
+//         error: action.payload,
+//       };
+//   }
+// };

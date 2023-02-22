@@ -1,5 +1,12 @@
 import axios from 'axios';
-import {failer, request, response} from '../actions/data';
+import {
+  failer,
+  failerSingleProduct,
+  request,
+  requestSingleProduct,
+  response,
+  responseSingleProduct,
+} from '../actions/data';
 
 export const getRealData = () => {
   return async dispatch => {
@@ -21,6 +28,29 @@ export const getRealData = () => {
       })
       .catch(e => {
         dispatch(failer(e));
+      });
+  };
+};
+export const getSingleData = () => {
+  return async dispatch => {
+    dispatch(requestSingleProduct());
+    await axios
+      .get('https://api.partner.winty.app/api/v1/ecomm-fe/get-single-product', {
+        headers: {
+          auth: 'ERRZcMfEPfXG8bGF',
+          userid: '0',
+          platform: 'mobile',
+          partnerid: '95',
+          productid: '1',
+        },
+      })
+      .then(res => {
+        setTimeout(() => {
+          dispatch(responseSingleProduct(res.data));
+        }, 100);
+      })
+      .catch(e => {
+        dispatch(failerSingleProduct(e));
       });
   };
 };

@@ -1,67 +1,109 @@
 import {
+  Dimensions,
   FlatList,
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 export default function Details({route}) {
   const {details} = route.params;
   const [currentPrice, setCurrentPrice] = useState(details.price);
-  console.log(details);
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const renderOnlyGallery = ({item}) => {
     return (
       <TouchableOpacity style={styles.galleryCon}>
         <Image
           source={{uri: item}}
-          style={styles.imgProduct}
+          style={styles.variantImg}
           resizeMode="contain"
         />
       </TouchableOpacity>
     );
   };
-  const renderGallery = ({item}) => {
+
+  const _renderItem = () => {
+    return (
+      <View style={styles.flatlistCon}>
+        <Image
+          source={{uri: details.product_variant[activeIndex].product_image}}
+          style={[styles.imgProduct]}
+          resizeMode="contain"
+        />
+      </View>
+    );
+  };
+  const renderpagination = () => {
+    return (
+      <Pagination
+        dotsLength={details.product_variant.length}
+        activeDotIndex={activeIndex}
+        dotStyle={styles.dotCon}
+        inactiveDotStyle={{
+          backgroundColor: 'blue',
+          // Define styles for inactive dots here
+        }}
+        inactiveDotOpacity={0.4}
+        inactiveDotScale={0.6}
+      />
+    );
+  };
+  const renderVariant = () => {
     return (
       <TouchableOpacity
         onPress={() => {
-          setCurrentPrice(item.price);
+          setActiveIndex(index), setCurrentPrice(item.price);
         }}
-        style={[styles.galleryCon]}>
+        style={styles.variantContainer}>
         <Image
           source={{uri: item.product_image}}
-          style={styles.imgProduct}
+          style={styles.variantImg}
           resizeMode="contain"
         />
-        <Text>{item.price}</Text>
+        <Text style={styles.colorTxt}>{`Color :  ${item.color}`}</Text>
+        <Text style={styles.sizeTxt}>{`Size : ${item.size}`}</Text>
       </TouchableOpacity>
     );
   };
   return (
-    <View>
+    <ScrollView contentContainerStyle={{paddingBottom: 80}}>
       <View style={styles.titleCon}>
         <Text>{details.title}</Text>
       </View>
+      <Carousel
+        activeAnimationType="spring"
+        pagingEnabled={true}
+        data={details.product_variant}
+        sliderWidth={Dimensions.get('screen').width}
+        itemWidth={Dimensions.get('screen').width}
+        renderItem={_renderItem}
+        onSnapToItem={index => setActiveIndex(index)}
+      />
+      {renderpagination()}
       <View style={styles.titleCon}>
         <Text>{`Base Price: ${currentPrice}`}</Text>
       </View>
       <FlatList
-        contentContainerStyle={styles.contentCon}
+        contentContainerStyle={styles.detailsProductContent}
+        numColumns={2}
         data={
           details.product_variant.length !== 0
             ? details.product_variant
             : details.image
         }
-        numColumns={2}
         renderItem={
           details.product_variant.length !== 0
-            ? renderGallery
+            ? renderVariant
             : renderOnlyGallery
         }
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -86,11 +128,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   imgProduct: {
-    height: 100,
-    width: 100,
+    height: '100%',
+    width: '100%',
+  },
+  detailsProductContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   contentCon: {
     alignItems: 'center',
     paddingBottom: 10,
+  },
+  variantContainer: {
+    backgroundColor: 'floralwhite',
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingHorizontal: 25,
+    paddingVertical: 20,
+    margin: 10,
+  },
+  variantImg: {
+    height: 100,
+    width: 100,
+  },
+  colorTxt: {
+    marginVertical: 5,
+    alignSelf: 'center',
+  },
+  sizeTxt: {
+    alignSelf: 'center',
+  },
+  dotCon: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 8,
+    backgroundColor: 'black',
+  },
+  flatlistCon: {
+    backgroundColor: 'floralwhite',
+    borderRadius: 5,
+    height: 250,
+    padding: 50,
+    marginLeft: 25,
+    marginRight: 25,
+    borderWidth: 1,
+    marginTop: 10,
+    elevation: 5,
   },
 });
